@@ -3,6 +3,7 @@ Created with CodeSandbox
 
 
 todo:
+- remove secrets and place into .env
 - add a test
 - add a component (repeat)
 - add props and type checking

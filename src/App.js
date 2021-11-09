@@ -1,6 +1,8 @@
 import "./styles.css";
 import CallApi from "./CallApi";
 
+console.log(process);
+
 export default function App() {
   return (
     <div className="App">

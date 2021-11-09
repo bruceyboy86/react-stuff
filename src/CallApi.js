@@ -12,7 +12,7 @@ const CallApi = () => {
       <>
         <label for="recipie-search">Search for recipie</label>
         <input
-          type="search"
+          type="text"
           id="recipie-search"
           aria-label="Search through recipie content"
           value={searchInput}
@@ -22,29 +22,36 @@ const CallApi = () => {
     );
   };
   useEffect(() => {
-    const options = {
-      method: "GET",
-      url: "https://yummly2.p.rapidapi.com/feeds/auto-complete",
-      params: { q: searchInput },
-      headers: {
-        "x-rapidapi-host": "yummly2.p.rapidapi.com",
-        "x-rapidapi-key": "653a66b57fmshb11b68509870fb5p19d6a9jsn7b2c99f2e949"
-      }
-    };
+    async function fetchData() {
+      const options = {
+        method: "GET",
+        url: "https://yummly2.p.rapidapi.com/feeds/auto-complete",
+        params: { q: searchInput },
+        headers: {
+          "x-rapidapi-host": "yummly2.p.rapidapi.com",
+          "x-rapidapi-key": "653a66b57fmshb11b68509870fb5p19d6a9jsn7b2c99f2e949"
+        }
+      };
 
-    setIsLoading(true);
-    axios
-      .request(options)
-      .then((response) => setRecipies(response.data))
-      .catch(() => setHasError(true))
-      .finally(() => setIsLoading(false));
+      setIsLoading(true);
+
+      await axios
+        .request(options)
+        .then((response) => {
+          setRecipies(response.data);
+          setHasError(false);
+        })
+        .catch(() => setHasError(true))
+        .finally(() => setIsLoading(false));
+    }
+    fetchData().catch(console.error);
   }, [searchInput]);
 
   return (
     <>
       <Input />
-      {isLoading && <span>spinner</span>}
       {!isLoading && hasError && <span>error</span>}
+      {isLoading && <div>spinner</div>}
       {!isLoading && recipies && (
         <ul>
           {recipies.searches.map((item) => (
